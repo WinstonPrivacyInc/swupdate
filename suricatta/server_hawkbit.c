@@ -1505,6 +1505,8 @@ static int suricatta_settings(void *elem, void  __attribute__ ((__unused__)) *da
 	get_field(LIBCFG_PARSER, elem, "retry",
 		&channel_data_defaults.retries);
 
+        get_field(LIBCFG_PARSER, elem, "nocheckcert", &channel_data_defaults.strictssl); 
+
 	GET_FIELD_STRING_RESET(LIBCFG_PARSER, elem, "retrywait", tmp);
 	if (strlen(tmp))
 		channel_data_defaults.retry_sleep =
@@ -1589,6 +1591,7 @@ server_op_res_t server_start(char *fname, int argc, char *argv[])
 
 	/* reset to optind=1 to parse suricatta's argument vector */
 	optind = 1;
+    /* 
 	while ((choice = getopt_long(argc, argv, "t:i:c:u:p:xr:y::w:",
 				     long_options, NULL)) != -1) {
 		switch (choice) {
@@ -1601,9 +1604,6 @@ server_op_res_t server_start(char *fname, int argc, char *argv[])
 			mandatory_argument_count |= ID_BIT;
 			break;
 		case 'c':
-			/* When no persistent update state storage is available,
-			 * use command line switch to instruct what to report.
-			 */
 			update_state = (unsigned int)*optarg;
 			switch (update_state) {
 			case STATE_INSTALLED:
@@ -1664,12 +1664,13 @@ server_op_res_t server_start(char *fname, int argc, char *argv[])
 			return SERVER_EINIT;
 		}
 	}
+*/      
 
-	if (mandatory_argument_count != ALL_MANDATORY_SET) {
-		fprintf(stderr, "Mandatory arguments missing!\n");
-		suricatta_print_help();
-		return SERVER_EINIT;
-	}
+//	if (mandatory_argument_count != ALL_MANDATORY_SET) {
+	//	fprintf(stderr, "Mandatory arguments missing!\n");
+		//suricatta_print_help();
+		//return SERVER_EINIT;
+//	}
 	if (argc > optind) {
 		fprintf(stderr, "Unused arguments.\n");
 		suricatta_print_help();
