@@ -19,6 +19,7 @@
 #include "uboot.h"
 #include "util.h"
 #include "bootloader.h"
+#include "suricatta/suricatta.h"
 
 struct env_opts *fw_env_opts = &(struct env_opts) {
 	.config_file = (char *)CONFIG_UBOOT_FWENV
