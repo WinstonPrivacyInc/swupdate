@@ -87,7 +87,6 @@ char *bootloader_env_get(const char *name)
 	char *var;
 
 	lock = lock_uboot_env();
-        INFO("lock %d in bootloader_env_get .\n", lock);
 
 	if (lock < 0)
 		return NULL;
@@ -99,7 +98,6 @@ char *bootloader_env_get(const char *name)
 	}
 
 	var = fw_getenv((char *)name);
-	INFO("fw_getenv name '%s' var %d .\n", (char*)name, var);
 
 	if (var)
 		value = strdup(var);

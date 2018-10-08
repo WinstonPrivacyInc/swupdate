@@ -7,7 +7,7 @@
 
 /*
  * This is a simple example how to control swupdate
- * triggering for a new update, streaming ore or more images
+ * triggering for a new update, streaming one or more images
  * and asking for the result.
  * This program is not thought to be used as it is, but as example
  * how to use the swupdateipc library.
