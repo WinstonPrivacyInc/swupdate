@@ -1591,7 +1591,7 @@ server_op_res_t server_start(char *fname, int argc, char *argv[])
 
 	/* reset to optind=1 to parse suricatta's argument vector */
 	optind = 1;
-    /* 
+    	
 	while ((choice = getopt_long(argc, argv, "t:i:c:u:p:xr:y::w:",
 				     long_options, NULL)) != -1) {
 		switch (choice) {
@@ -1664,13 +1664,13 @@ server_op_res_t server_start(char *fname, int argc, char *argv[])
 			return SERVER_EINIT;
 		}
 	}
-*/      
+      
 
-//	if (mandatory_argument_count != ALL_MANDATORY_SET) {
-	//	fprintf(stderr, "Mandatory arguments missing!\n");
-		//suricatta_print_help();
-		//return SERVER_EINIT;
-//	}
+	if (mandatory_argument_count != ALL_MANDATORY_SET) {
+		fprintf(stderr, "Mandatory arguments missing!\n");
+		suricatta_print_help();
+		return SERVER_EINIT;
+	}
 	if (argc > optind) {
 		fprintf(stderr, "Unused arguments.\n");
 		suricatta_print_help();
