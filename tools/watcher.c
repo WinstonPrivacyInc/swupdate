@@ -59,6 +59,7 @@ int main(int argc, char **argv)
 	unsigned int filled_len;
 	int opt_w = 0;
 	int opt_r = 0;
+	int opt_p = 0;
 	int c;
 	RECOVERY_STATUS	status = IDLE;		/* Update Status (Running, Failure) */
 
