@@ -55,12 +55,10 @@ int main(int argc, char **argv)
 	struct progress_msg msg;
 	const char *tmpdir;
 	unsigned int curstep = 0;
-	unsigned int percent = 0;
 	char bar[60];
 	unsigned int filled_len;
 	int opt_w = 0;
 	int opt_r = 0;
-	int opt_p = 0;
 	int c;
 	RECOVERY_STATUS	status = IDLE;		/* Update Status (Running, Failure) */
 
@@ -154,7 +152,7 @@ int main(int argc, char **argv)
 
 			//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 			if ((msg.status == SUCCESS) && opt_r) {
-				system(fw_setenv confirmstate 2);
+				system("fw_setenv confirmstate 2");
 				sleep(5);
 				if (system("reboot") < 0) { /* It should never happen */
 					fprintf(stdout, "Please reset the board.\n");
