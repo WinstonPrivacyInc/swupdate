@@ -154,6 +154,7 @@ int main(int argc, char **argv)
 			//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 			if ((msg.status == SUCCESS) && opt_r) {
 				system("fw_setenv confirmstate 2");
+				fprintf(stdout,"Change to TESTING conmfirmstate = 2");
 				sleep(5);
 				if (system("reboot") < 0) { /* It should never happen */
 					fprintf(stdout, "Please reset the board.\n");
@@ -161,7 +162,7 @@ int main(int argc, char **argv)
 					system("/etc/init.d/swupdate restart");
 				}
 			} else if(msg.status == FAILURE) {
-				fprintf(stdout, "Change to FAILED confirmedstate = 3");		
+				fprintf(stdout, "Change to FAILED confirmstate = 3");		
 				system("fw_setenv confirmstate 3");
 			}
 			break;
