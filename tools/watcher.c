@@ -27,7 +27,6 @@
 
 #define RESET		0
 
-
 static void resetterm(void)
 {
 	fprintf(stdout, "%c[%dm", 0x1B, RESET);
@@ -155,7 +154,7 @@ int main(int argc, char **argv)
 
 			//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 			if ((msg.status == SUCCESS) && opt_r) {
-				system(fw_setenv confirmstate 1);
+				system(fw_setenv confirmstate 2);
 				sleep(5);
 				if (system("reboot") < 0) { /* It should never happen */
 					fprintf(stdout, "Please reset the board.\n");
@@ -169,7 +168,6 @@ int main(int argc, char **argv)
 			break;
 		case DONE:
 			fprintf(stdout, "\nDONE.\n");
-			system("fw_setenv confirmstate 2");
 			break;
 		default:
 			break;
