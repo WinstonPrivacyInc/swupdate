@@ -27,6 +27,15 @@
 
 #define RESET		0
 
+// Function will run verification tasks on new parition
+// Currently switches state to 2 - STATE_TESTING
+static bool verification()
+{
+	system("fw_setenv ustate 2");
+	fprintf(stdout, "change ustate to 2");
+	return 1; // TRUE
+}
+
 static void resetterm(void)
 {
 	fprintf(stdout, "%c[%dm", 0x1B, RESET);
@@ -113,8 +122,6 @@ int main(int argc, char **argv)
 			switch (msg.source) {
 			case SOURCE_SURICATTA:
 				fprintf(stdout, "BACKEND\n\n");
-				fprintf(stdout, "Setting confirmstate = 3 which is FAILED until update is done");
-				system("fw_setenv confirmstate 3");
 				break;
 			}
 
@@ -152,18 +159,19 @@ int main(int argc, char **argv)
 			resetterm();
 
 			//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
-			if ((msg.status == SUCCESS) && opt_r) {
-				system("fw_setenv confirmstate 2");
-				fprintf(stdout,"Change to TESTING conmfirmstate = 2");
+			if ((msg.status == SUCCESS)) {
+				fprintff(stdout, "SUCCESS about to verify");				
 				sleep(5);
-				if (system("reboot") < 0) { /* It should never happen */
-					fprintf(stdout, "Please reset the board.\n");
-					system("fw_setenv confirmstate 3");
-					system("/etc/init.d/swupdate restart");
+				if (verification()){
+					if (system("reboot") < 0) { /* It should never happen */
+						fprintf(stdout, "Please reset the board.\n");
+						system("fw_setenv ustate 3");
+						//system("/etc/init.d/swupdate restart");
+					}
 				}
 			} else if(msg.status == FAILURE) {
-				fprintf(stdout, "Change to FAILED confirmstate = 3");		
-				system("fw_setenv confirmstate 3");
+				fprintf(stdout, "Change to FAILED ustate = 3");		
+				system("fw_setenv ustate 3");
 			}
 			break;
 		case DONE:
