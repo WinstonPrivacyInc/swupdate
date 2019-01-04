@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 
 			//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 			if ((msg.status == SUCCESS)) {
-				fprintff(stdout, "SUCCESS about to verify");				
+				fprintf(stdout, "SUCCESS about to verify");				
 				sleep(5);
 				if (verification()){
 					if (system("reboot") < 0) { /* It should never happen */
