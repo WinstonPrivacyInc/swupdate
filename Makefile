@@ -356,6 +356,7 @@ include $(srctree)/Makefile.flags
 objs-y		:= core handlers
 libs-y		:= corelib ipc mongoose parser suricatta bootloader
 shareds-y	:= bindings
+tools-libs-y    := suricatta bootloader
 tools-y		:= tools
 
 swupdate-dirs	:= $(objs-y) $(libs-y)
@@ -365,7 +366,7 @@ swupdate-all	:= $(swupdate-objs) $(swupdate-libs)
 
 tools-dirs	:= $(tools-y)
 tools-objs	:= $(patsubst %,%/built-in.o, $(tools-y))
-tools-libs	:= $(patsubst %,%/lib.a, $(libs-y))
+tools-libs	:= $(patsubst %,%/lib.a, $(tools-libs-y))
 tools-bins	:= $(patsubst $(tools-y)/%.c,$(tools-y)/%,$(wildcard $(tools-y)/*.c))
 tools-bins-unstr:= $(patsubst %,%_unstripped,$(tools-bins))
 tools-all	:= $(tools-objs) $(tools-libs)
