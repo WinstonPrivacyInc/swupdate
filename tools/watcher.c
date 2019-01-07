@@ -43,6 +43,7 @@ int main(int argc, char **argv)
 	unsigned int curstep = 0;
 	char bar[60];
 	unsigned int filled_len;
+	int opt_w = 0;
 	int c;
 	RECOVERY_STATUS	status = IDLE;		/* Update Status (Running, Failure) */
 
