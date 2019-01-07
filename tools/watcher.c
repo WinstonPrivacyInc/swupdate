@@ -36,9 +36,9 @@ static void log_info(char *message){
 // Currently switches state to 2 - STATE_TESTING
 static bool verification()
 {
-	system("fw_setenv ustate 2");
+	int ret = system("fw_setenv ustate 2");
 	log_info("change ustate to 2");
-	return 1; // TRUE
+	return ret; // TRUE
 }
 
 int main(int argc, char **argv)
@@ -73,13 +73,12 @@ int main(int argc, char **argv)
 		 */
 		if ((status == IDLE) && (msg.status != IDLE)) {
 			log_info("Update started !");
-			log_info("Interface: ");
 			switch (msg.source) {
 				case SOURCE_UNKNOWN:
-					log_info("UNKNOWN");
+					log_info("Interface: UNKNOWN");
 					break;	
 				case SOURCE_SURICATTA:
-					log_info("BACKEND");
+					log_info("Interface: BACKEND");
 					break;
 			}
 
@@ -97,10 +96,13 @@ int main(int argc, char **argv)
 					log_info("SUCCESS about to verify");				
 					if (verification()){
 						sleep(5);
-						if (system("reboot") < 0) { /* It should never happen */
+						log_info("will reboot here");
+						/*
+						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
 							system("fw_setenv ustate 3");
 						}
+						*/
 					}
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
@@ -108,7 +110,7 @@ int main(int argc, char **argv)
 				}
 				break;
 			case DONE:
-				log_info("DONE. ");
+				log_info("Update is DONE. ");
 				break;
 			default:
 				break;
