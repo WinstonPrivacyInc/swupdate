@@ -24,6 +24,8 @@
 #include <getopt.h>
 #include <syslog.h>
 #include <progress_ipc.h>
+#include "suricatta/state.h"
+
 
 // log info function
 static void log_info(char *message){
@@ -36,9 +38,10 @@ static void log_info(char *message){
 // Currently switches state to 2 - STATE_TESTING
 static bool verification()
 {
-	int ret = system("fw_setenv ustate 2");
+      //	int ret = system("fw_setenv ustate 2");
+        save_state("ustate", STATE_TESTING);
 	log_info("change ustate to 2");
-	return ret; // TRUE
+	return 0; // TRUE
 }
 
 int main(int argc, char **argv)
