@@ -93,8 +93,9 @@ int main(int argc, char **argv)
 			case FAILURE:
 		//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 				if ((msg.status == SUCCESS)) {
-					log_info("SUCCESS about to verify");				
-					if (verification()){
+					log_info("SUCCESS about to verify");
+					int verified = verification();				
+					if (verified == 0){  // good reboot
 						sleep(5);
 						log_info("will reboot here");
 						/*
@@ -103,6 +104,11 @@ int main(int argc, char **argv)
 							system("fw_setenv ustate 3");
 						}
 						*/
+					} else if (verified == -1) {
+						log_info("Update not verified, will not reboot");
+						system("fw_setenv ustate 3");
+					} else {
+						log_info("verification state unknown");
 					}
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
