@@ -366,7 +366,7 @@ swupdate-libs	:= $(patsubst %,%/lib.a, $(libs-y))
 swupdate-all	:= $(swupdate-objs) $(swupdate-libs)
 
 watcher-dirs    := $(watcher-y) $(watcher-libs-y)
-watcher-objs    := $(patsubst %,%/built-in.o, $(watcher-y))
+watcher-objs    := $(watcher-y)
 watcher-libs 	:= $(patsubst %,%/lib.a, $(watcher-libs-y))
 watcher-all     := $(watcher-objs) $(watcher-libs)
 
