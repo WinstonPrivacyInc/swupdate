@@ -24,7 +24,8 @@
 #include <getopt.h>
 #include <syslog.h>
 #include <progress_ipc.h>
-#include "suricatta/state.h"
+#include <util.h>
+#include <suricatta/state.h>
 
 
 // log info function
