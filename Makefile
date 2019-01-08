@@ -363,11 +363,11 @@ swupdate-objs	:= $(patsubst %,%/built-in.o, $(objs-y))
 swupdate-libs	:= $(patsubst %,%/lib.a, $(libs-y))
 swupdate-all	:= $(swupdate-objs) $(swupdate-libs)
 
-tools-dirs	:= $(tools-y)
+tools-dirs	:= $(tools-y) $(libs-y)
 tools-objs	:= $(patsubst %,%/built-in.o, $(tools-y))
 tools-bins	:= $(patsubst $(tools-y)/%.c,$(tools-y)/%,$(wildcard $(tools-y)/*.c))
 tools-bins-unstr:= $(patsubst %,%_unstripped,$(tools-bins))
-tools-all	:= $(tools-objs)
+tools-all	:= $(tools-objs) $(swupdate-libs) 
 
 shared-dirs	:= $(shareds-y)
 shared-libs	:= $(patsubst %,%/built-in.o, $(shareds-y))
