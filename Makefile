@@ -357,7 +357,7 @@ objs-y		:= core handlers
 libs-y		:= corelib ipc mongoose parser suricatta bootloader
 shareds-y	:= bindings
 tools-y		:= tools
-watcher-libs-y  := suricatta bootloader
+#watcher-libs-y  := suricatta bootloader
 watcher-y       := watcher 
 
 swupdate-dirs	:= $(objs-y) $(libs-y)
@@ -365,9 +365,9 @@ swupdate-objs	:= $(patsubst %,%/built-in.o, $(objs-y))
 swupdate-libs	:= $(patsubst %,%/lib.a, $(libs-y))
 swupdate-all	:= $(swupdate-objs) $(swupdate-libs)
 
-watcher-dirs    := $(watcher-y) $(watcher-libs-y)
-watcher-objs    := watcher/watcher.o 
-watcher-libs 	:= $(patsubst %,%/lib.a, $(watcher-libs-y))
+watcher-dirs    := $(watcher-y) $(libs-y)
+watcher-objs    := $(patsubst %,%/built-in.o, $(watcher-y)) 
+watcher-libs 	:= $(patsubst %,%/lib.a, $(libs-y))
 watcher-all     := $(watcher-objs) $(watcher-libs)
 
 tools-dirs	:= $(tools-y) $(libs-y)
