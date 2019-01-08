@@ -353,15 +353,22 @@ include $(srctree)/Makefile.flags
 # This allow a user to issue only 'make' to build a kernel including modules
 # Defaults to vmlinux, but the arch makefile usually adds further targets
 
-objs-y		:= core handlers
+objs-y		:= core handlers 
 libs-y		:= corelib ipc mongoose parser suricatta bootloader
 shareds-y	:= bindings
 tools-y		:= tools
+watcher-libs-y  := suricatta bootloader
+watcher-y       := tools
 
 swupdate-dirs	:= $(objs-y) $(libs-y)
 swupdate-objs	:= $(patsubst %,%/built-in.o, $(objs-y))
 swupdate-libs	:= $(patsubst %,%/lib.a, $(libs-y))
 swupdate-all	:= $(swupdate-objs) $(swupdate-libs)
+
+watcher-dirs    := $(watcher-y) $(watcher-libs-y)
+watcher-objs    := $(patsubst %,%/built-in.o, $(watcher-y))
+watcher-libs 	:= $(patsubst %,%/lib.a, $(watcher-libs-y))
+watcher-all     := $(watcher-objs) $(watcher-libs)
 
 tools-dirs	:= $(tools-y) $(libs-y)
 tools-objs	:= $(patsubst %,%/built-in.o, $(tools-y))
@@ -373,7 +380,7 @@ shared-dirs	:= $(shareds-y)
 shared-libs	:= $(patsubst %,%/built-in.o, $(shareds-y))
 shared-all	:= $(shared-libs)
 
-all: swupdate ${tools-bins} lua_swupdate.so
+all: swupdate watcher ${tools-bins} lua_swupdate.so
 
 # Do modpost on a prelinked vmlinux. The finally linked vmlinux has
 # relevant sections renamed as per the linker script.
@@ -389,6 +396,19 @@ quiet_cmd_swupdate = LD      $@
 
 swupdate_unstripped: $(swupdate-all) FORCE
 	$(call if_changed,swupdate)
+
+quiet_cmd_watcher = LD      $@
+      cmd_watcher = $(srctree)/scripts/trylink \
+      "$@" \
+      "$(CC)" \
+      "$(KBUILD_CFLAGS) $(CFLAGS_watcher)" \
+      "$(LDFLAGS) $(EXTRA_LDFLAGS) $(LDFLAGS_watcher)" \
+      "$(watcher-objs)" \
+      "$(watcher-libs)" \
+      "$(LDLIBS)"
+
+watcher_unstripped: $(watcher-all) FORCE
+	$(call if_changed,watcher)
 
 quiet_cmd_addon = LD      $@
       cmd_addon = $(srctree)/scripts/trylink \
