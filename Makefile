@@ -357,18 +357,18 @@ objs-y		:= core handlers
 libs-y		:= corelib ipc mongoose parser suricatta bootloader
 shareds-y	:= bindings
 tools-y		:= tools
-watchers-libs-y  := suricatta bootloader
-watchers-y       := tools
+watcher-libs-y  := suricatta bootloader
+watcher-y       := watcher 
 
 swupdate-dirs	:= $(objs-y) $(libs-y)
 swupdate-objs	:= $(patsubst %,%/built-in.o, $(objs-y))
 swupdate-libs	:= $(patsubst %,%/lib.a, $(libs-y))
 swupdate-all	:= $(swupdate-objs) $(swupdate-libs)
 
-watchers-dirs    := $(watchers-y) $(watchers-libs-y)
-watcher-objs    := $(patsubst %,%/built-in.o, $(watchers-y))
-watchers-libs 	:= $(patsubst %,%/lib.a, $(watchers-libs-y))
-watchers-all     := $(watchers-objs) $(watchers-libs)
+watcher-dirs    := $(watcher-y) $(watcher-libs-y)
+watcher-objs    := $(patsubst %,%/built-in.o, $(watcher-y))
+watcher-libs 	:= $(patsubst %,%/lib.a, $(watcher-libs-y))
+watcher-all     := $(watcher-objs) $(watcher-libs)
 
 tools-dirs	:= $(tools-y) $(libs-y)
 tools-objs	:= $(patsubst %,%/built-in.o, $(tools-y))
@@ -403,11 +403,11 @@ quiet_cmd_watcher = LD      $@
       "$(CC)" \
       "$(KBUILD_CFLAGS) $(CFLAGS_watcher)" \
       "$(LDFLAGS) $(EXTRA_LDFLAGS) $(LDFLAGS_watcher)" \
-      "$(watchers-objs)" \
-      "$(watchers-libs)" \
+      "$(watcher-objs)" \
+      "$(watcher-libs)" \
       "$(LDLIBS)"
 
-watcher_unstripped: $(watchers-all) FORCE
+watcher_unstripped: $(watcher-all) FORCE
 	$(call if_changed,watcher)
 
 quiet_cmd_addon = LD      $@

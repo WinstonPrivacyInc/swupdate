@@ -12,9 +12,7 @@ lib-y += \
 	 client.o \
 	 progress.o \
 	 hawkbitcfg.o \
-	 sendtohawkbit.o \
-
-watcher-y += watcher.o
+	 sendtohawkbit.o 
 
 # # Uncomment the next lines to integrate the compiling/linking of
 # # any .c files placed alongside the above "official" tools in the
