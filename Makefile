@@ -445,6 +445,9 @@ endif
 swupdate: swupdate_unstripped
 	$(call cmd,strip)
 
+watcher:  watcher_unstripped
+	$(call cmd,strip)
+
 ${tools-bins}: ${tools-objs} ${swupdate-libs} FORCE
 	$(call if_changed,addon,$@.o)
 	@mv $@ $@_unstripped
@@ -459,6 +462,7 @@ install: all
 	for i in ${tools-bins};do \
 		install -m 755 $$i ${DESTDIR}/usr/bin; \
 	done
+	install -m 755 watcher ${DESTDIR}/usr/bin
 	install -m 0644 include/network_ipc.h ${DESTDIR}/usr/include
 	install -m 0644 include/swupdate_status.h ${DESTDIR}/usr/include
 	install -m 0644 include/progress_ipc.h ${DESTDIR}/usr/include
@@ -486,6 +490,7 @@ corelib-tests: FORCE
 # The actual objects are generated when descending,
 # make sure no implicit rule kicks in
 $(sort $(swupdate-all)): $(swupdate-dirs) ;
+$(sort $(watcher-all)): $(watcher-dirs) ;
 $(sort $(tools-all)): $(tools-dirs) ;
 $(sort $(shared-all)): $(shared-dirs) ;
 
@@ -495,8 +500,10 @@ $(sort $(shared-all)): $(shared-dirs) ;
 # make menuconfig etc.
 # Error messages still appears in the original language
 
-PHONY += $(swupdate-dirs) $(tools-dirs) $(shared-dirs)
+PHONY += $(swupdate-dirs) $(watcher-dirs) $(tools-dirs) $(shared-dirs)
 $(swupdate-dirs): scripts
+	$(Q)$(MAKE) $(build)=$@
+$(watcher-dirs): scripts
 	$(Q)$(MAKE) $(build)=$@
 $(tools-dirs): scripts
 	$(Q)$(MAKE) $(build)=$@
