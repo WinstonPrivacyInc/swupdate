@@ -425,7 +425,7 @@ endif
 swupdate: swupdate_unstripped
 	$(call cmd,strip)
 
-${tools-bins}: ${tools-objs} FORCE
+${tools-bins}: ${tools-objs} ${swupdate-libs} FORCE
 	$(call if_changed,addon,$@.o)
 	@mv $@ $@_unstripped
 	$(call cmd,strip)
