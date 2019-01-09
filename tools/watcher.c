@@ -56,6 +56,7 @@ int main(int argc, char **argv)
 	int opt_w = 0;
 	int c;
 	loglevel =  INFOLEVEL;
+	notify_init();
         notify(SUCCESS, RECOVERY_NO_ERROR, loglevel, "starting watcher !");
 	RECOVERY_STATUS	status = IDLE;		/* Update Status (Running, Failure) */
 	openlog ("swupdate-watcher", LOG_CONS | LOG_PID, LOG_USER);
