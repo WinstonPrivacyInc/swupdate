@@ -40,7 +40,7 @@ static void log_info(char *message){
 }
 // Function will run verification tasks on new parition
 // Currently switches state to 2 - STATE_TESTING
-static bool verification()
+static int verification()
 {
       //	int ret = system("fw_setenv ustate 2");
         save_state((char*)STATE_KEY, STATE_TESTING);
