@@ -397,6 +397,16 @@ quiet_cmd_swupdate = LD      $@
 swupdate_unstripped: $(swupdate-all) FORCE
 	$(call if_changed,swupdate)
 
+quiet_cmd_watcher = LD      $@
+      cmd_watcher = $(srctree)/scripts/trylink \
+      "$@" \
+      "$(CC)" \
+      "$(KBUILD_CFLAGS) $(CFLAGS_watcher)" \
+      "$(LDFLAGS) $(EXTRA_LDFLAGS) $(LDFLAGS_watcher)" \
+      "$(watcher-objs)" \
+      "$(watcher-libs)" \
+      "$(LDLIBS)"
+
 watcher_unstripped: $(watcher-all) FORCE
 	$(call if_changed,watcher)
 
@@ -435,7 +445,7 @@ endif
 swupdate: swupdate_unstripped
 	$(call cmd,strip)
 
-watcher: watcher_unstripped
+watcher:  watcher_unstripped
 	$(call cmd,strip)
 
 ${tools-bins}: ${tools-objs} ${swupdate-libs} FORCE
