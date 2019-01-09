@@ -407,7 +407,7 @@ quiet_cmd_shared = LD      $@
       "-shared " \
       "$(KBUILD_CFLAGS) $(CFLAGS_swupdate)" \
       "$(LDFLAGS) $(EXTRA_LDFLAGS) $(LDFLAGS_swupdate)" \
-      "$(shared-libs) ipc/lib.a suricatta/lib.a bootloader/lib.a" \
+      "$(shared-libs) ipc/lib.a" \
       "$(LDLIBS)"
 
 lua_swupdate.so: $(shared-libs) ${swupdate-libs} FORCE

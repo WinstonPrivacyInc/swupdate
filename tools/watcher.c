@@ -28,7 +28,6 @@
 #include <suricatta/state.h>
 
 int loglevel = ERRORLEVEL;
-
 // log info function
 static void log_info(char *message){
 	int length = strlen(message) + 1;
@@ -42,7 +41,6 @@ static bool verification()
 {
       //	int ret = system("fw_setenv ustate 2");
         save_state("ustate", STATE_TESTING);
-        notify(SUCCESS, RECOVERY_NO_ERROR, INFOLEVEL, "save state successful !");
 	log_info("change ustate to 2");
 	return 0; // TRUE
 }
@@ -57,8 +55,8 @@ int main(int argc, char **argv)
 	unsigned int filled_len;
 	int opt_w = 0;
 	int c;
-	int loglevel = ERRORLEVEL;
-        notify(SUCCESS, RECOVERY_NO_ERROR, INFOLEVEL, "starting watcher !");
+	loglevel =  INFOLEVEL;
+        notify(SUCCESS, RECOVERY_NO_ERROR, loglevel, "starting watcher !");
 	RECOVERY_STATUS	status = IDLE;		/* Update Status (Running, Failure) */
 	openlog ("swupdate-watcher", LOG_CONS | LOG_PID, LOG_USER);
 	/* Process options with getopt */
