@@ -1,5 +1,5 @@
-VERSION = 2018
-PATCHLEVEL = 3
+SION = 2018
+PATCHLEVEL = 11
 SUBLEVEL = 0
 EXTRAVERSION =
 NAME =
@@ -353,34 +353,27 @@ include $(srctree)/Makefile.flags
 # This allow a user to issue only 'make' to build a kernel including modules
 # Defaults to vmlinux, but the arch makefile usually adds further targets
 
-objs-y		:= core handlers 
+objs-y		:= core handlers
 libs-y		:= corelib ipc mongoose parser suricatta bootloader
 shareds-y	:= bindings
 tools-y		:= tools
-#watcher-libs-y  := suricatta bootloader
-watcher-y       := watcher 
 
 swupdate-dirs	:= $(objs-y) $(libs-y)
 swupdate-objs	:= $(patsubst %,%/built-in.o, $(objs-y))
 swupdate-libs	:= $(patsubst %,%/lib.a, $(libs-y))
 swupdate-all	:= $(swupdate-objs) $(swupdate-libs)
 
-watcher-dirs    := $(watcher-y) $(libs-y)
-watcher-objs    := $(patsubst %,%/built-in.o, $(watcher-y)) 
-watcher-libs 	:= $(patsubst %,%/lib.a, $(libs-y))
-watcher-all     := $(watcher-objs) $(watcher-libs)
-
-tools-dirs	:= $(tools-y) $(libs-y)
+tools-dirs	:= $(tools-y)
 tools-objs	:= $(patsubst %,%/built-in.o, $(tools-y))
 tools-bins	:= $(patsubst $(tools-y)/%.c,$(tools-y)/%,$(wildcard $(tools-y)/*.c))
 tools-bins-unstr:= $(patsubst %,%_unstripped,$(tools-bins))
-tools-all	:= $(tools-objs) 
+tools-all	:= $(tools-objs)
 
 shared-dirs	:= $(shareds-y)
 shared-libs	:= $(patsubst %,%/built-in.o, $(shareds-y))
 shared-all	:= $(shared-libs)
 
-all: swupdate watcher ${tools-bins} lua_swupdate.so
+all: swupdate ${tools-bins} lua_swupdate.so
 
 # Do modpost on a prelinked vmlinux. The finally linked vmlinux has
 # relevant sections renamed as per the linker script.
@@ -396,19 +389,6 @@ quiet_cmd_swupdate = LD      $@
 
 swupdate_unstripped: $(swupdate-all) FORCE
 	$(call if_changed,swupdate)
-
-quiet_cmd_watcher = LD      $@
-      cmd_watcher = $(srctree)/scripts/trylink \
-      "$@" \
-      "$(CC)" \
-      "$(KBUILD_CFLAGS) $(CFLAGS_watcher)" \
-      "$(LDFLAGS) $(EXTRA_LDFLAGS) $(LDFLAGS_watcher)" \
-      "$(watcher-objs)" \
-      "$(watcher-libs)" \
-      "$(LDLIBS)"
-
-watcher_unstripped: $(watcher-all) FORCE
-	$(call if_changed,watcher)
 
 quiet_cmd_addon = LD      $@
       cmd_addon = $(srctree)/scripts/trylink \
@@ -427,7 +407,7 @@ quiet_cmd_shared = LD      $@
       "-shared " \
       "$(KBUILD_CFLAGS) $(CFLAGS_swupdate)" \
       "$(LDFLAGS) $(EXTRA_LDFLAGS) $(LDFLAGS_swupdate)" \
-      "$(shared-libs) ipc/lib.a" \
+      "$(shared-libs) ipc/lib.a surcatta/lib.a" \
       "$(LDLIBS)"
 
 lua_swupdate.so: $(shared-libs) ${swupdate-libs} FORCE
@@ -445,9 +425,6 @@ endif
 swupdate: swupdate_unstripped
 	$(call cmd,strip)
 
-watcher:  watcher_unstripped
-	$(call cmd,strip)
-
 ${tools-bins}: ${tools-objs} ${swupdate-libs} FORCE
 	$(call if_changed,addon,$@.o)
 	@mv $@ $@_unstripped
@@ -462,7 +439,6 @@ install: all
 	for i in ${tools-bins};do \
 		install -m 755 $$i ${DESTDIR}/usr/bin; \
 	done
-	install -m 755 watcher ${DESTDIR}/usr/bin
 	install -m 0644 include/network_ipc.h ${DESTDIR}/usr/include
 	install -m 0644 include/swupdate_status.h ${DESTDIR}/usr/include
 	install -m 0644 include/progress_ipc.h ${DESTDIR}/usr/include
@@ -490,7 +466,6 @@ corelib-tests: FORCE
 # The actual objects are generated when descending,
 # make sure no implicit rule kicks in
 $(sort $(swupdate-all)): $(swupdate-dirs) ;
-$(sort $(watcher-all)): $(watcher-dirs) ;
 $(sort $(tools-all)): $(tools-dirs) ;
 $(sort $(shared-all)): $(shared-dirs) ;
 
@@ -500,10 +475,8 @@ $(sort $(shared-all)): $(shared-dirs) ;
 # make menuconfig etc.
 # Error messages still appears in the original language
 
-PHONY += $(swupdate-dirs) $(watcher-dirs) $(tools-dirs) $(shared-dirs)
+PHONY += $(swupdate-dirs) $(tools-dirs) $(shared-dirs)
 $(swupdate-dirs): scripts
-	$(Q)$(MAKE) $(build)=$@
-$(watcher-dirs): scripts
 	$(Q)$(MAKE) $(build)=$@
 $(tools-dirs): scripts
 	$(Q)$(MAKE) $(build)=$@
@@ -532,7 +505,7 @@ MRPROPER_FILES += .config .config.old tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS
 #
 clean: rm-dirs  := $(CLEAN_DIRS)
 clean: rm-files := $(CLEAN_FILES)
-clean-dirs      := $(addprefix _clean_, $(swupdate-dirs) $(tools-dirs) $(shared-dirs))
+clean-dirs      := $(addprefix _clean_, $(swupdate-dirs) $(tools-dirs) $(shared-dirs) scripts/acceptance-tests)
 
 PHONY += $(clean-dirs) clean archclean
 $(clean-dirs):
@@ -546,7 +519,7 @@ clean: $(clean-dirs)
 		-o -name '.*.d' -o -name '.*.tmp' -o -name '*.mod.c' \
 		-o -name modules.builtin -o -name '.tmp_*.o.*' \
 		-o -name '*.gcno' \) -type f -print | xargs rm -f
-	@make -C doc clean
+	@$(MAKE) -C doc clean
 
 # mrproper - Delete all generated files, including .config
 #
@@ -603,7 +576,7 @@ FORCE:
 
 dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub \
 latex latexpdf text man changes linkcheck html doctest:
-	@make -C doc $@
+	@$(MAKE) -C doc $@
 
 # Declare the contents of the .PHONY variable as phony.  We keep that
 # information in a variable so we can use it in if_changed and friends.
