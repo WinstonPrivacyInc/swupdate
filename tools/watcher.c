@@ -28,6 +28,7 @@
 #include <suricatta/state.h>
 
 int loglevel = ERRORLEVEL;
+char *state_key = "ustate";
 // log info function
 static void log_info(char *message){
 	int length = strlen(message) + 1;
@@ -40,8 +41,8 @@ static void log_info(char *message){
 static bool verification()
 {
       //	int ret = system("fw_setenv ustate 2");
-        save_state("ustate", STATE_TESTING);
-	log_info("change ustate to 2");
+        save_state(state_key, STATE_TESTING);
+//	log_info("change ustate to 2");
 	return 0; // TRUE
 }
 
@@ -111,13 +112,15 @@ int main(int argc, char **argv)
 						*/
 					} else if (verified == -1) {
 						log_info("Update not verified, will not reboot");
-						system("fw_setenv ustate 3");
+						//system("fw_setenv ustate 3");
+						save_state(state_key, STATE_FAILED);
 					} else {
 						log_info("verification state unknown");
 					}
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
-					system("fw_setenv ustate 3");
+					//system("fw_setenv ustate 3");
+					save_state(state_key, STATE_FAILED);
 				}
 				break;
 			case DONE:
