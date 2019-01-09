@@ -27,6 +27,7 @@
 #include <util.h>
 #include <suricatta/state.h>
 
+int loglevel = ERRORLEVEL;
 
 // log info function
 static void log_info(char *message){
@@ -41,6 +42,7 @@ static bool verification()
 {
       //	int ret = system("fw_setenv ustate 2");
         save_state("ustate", STATE_TESTING);
+        notify(SUCCESS, RECOVERY_NO_ERROR, INFOLEVEL, "save state successful !");
 	log_info("change ustate to 2");
 	return 0; // TRUE
 }
