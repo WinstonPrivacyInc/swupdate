@@ -28,6 +28,7 @@
 #include <suricatta/state.h>
 
 int loglevel = ERRORLEVEL;
+notify(SUCCESS, 0, INFOLEVEL, NULL);
 // log info function
 static void log_info(char *message){
 	int length = strlen(message) + 1;
