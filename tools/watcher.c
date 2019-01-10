@@ -101,11 +101,13 @@ int main(int argc, char **argv)
 			case FAILURE:
 		//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 				if ((msg.status == SUCCESS)) {
-					log_info("SUCCESS about to verify");
+					//log_info("SUCCESS about to verify");
+					fprintf(stdout, "SUCCESS");
 					int verified = verification();				
 					if (verified == 0){  // good reboot
-						sleep(5);
-						log_info("will reboot here");
+						//sleep(5);
+						//log_info("will reboot here");
+						fprintf(stdout, "will reboot here");
 						/*
 						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
