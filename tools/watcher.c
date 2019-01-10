@@ -42,9 +42,8 @@ static void log_info(char *message){
 // Currently switches state to 2 - STATE_TESTING
 static int verification()
 {
-      //	int ret = system("fw_setenv ustate 2");
         save_state((char*)STATE_KEY, STATE_TESTING);
-//	log_info("change ustate to 2");
+	log_info("change ustate to 2");
 	return 0; // TRUE
 }
 
@@ -101,30 +100,23 @@ int main(int argc, char **argv)
 			case FAILURE:
 		//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 				if ((msg.status == SUCCESS)) {
-					//log_info("SUCCESS about to verify");
-					fprintf(stdout, "SUCCESS");
+					log_info("SUCCESS about to verify");
 					int verified = verification();				
-					save_state((char*)STATE_KEY, STATE_TESTING);
 					if (verified == 0) {  // good reboot
-						//sleep(5);
-						//log_info("will reboot here");
-						fprintf(stdout, "will reboot here");
-						/*
+						sleep(5);
+						log_info("will reboot here");
 						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
-							system("fw_setenv ustate 3");
+							save_state((char*)STATE_KEY, STATE_FAILED);
 						}
-						*/
 					} else if (verified == -1) {
 						log_info("Update not verified, will not reboot");
-						//system("fw_setenv ustate 3");
 						save_state((char*)STATE_KEY, STATE_FAILED);
 					} else {
 						log_info("verification state unknown");
 					}
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
-					//system("fw_setenv ustate 3");
 					save_state((char*)STATE_KEY, STATE_FAILED);
 				}
 				break;

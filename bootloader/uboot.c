@@ -66,7 +66,6 @@ int bootloader_env_set(const char *name, const char *value)
 		unlock_uboot_env(lock);
 		return -1;
 	}
-	fprintf(stdout, "name: %s, value: %d", name, value);
 	fw_env_write ((char *)name, (char *)value);
 	//ret = fw_env_flush(fw_env_opts);
 	ret = fw_env_close (fw_env_opts) == 0 ? SERVER_OK : SERVER_EERR;
