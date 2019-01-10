@@ -71,7 +71,8 @@ server_op_res_t save_state(char *key, update_state_t value)
 	char value_str[2] = {value, '\0'};
 
 //	CHECK_STATE_VAR(key);
-
+	fprintf(stdout, "key: %s, value: %d", key, value);
+			
 	ret = bootloader_env_set(key, value_str);
 
 	return ret == 0 ? SERVER_OK : SERVER_EERR;

@@ -104,7 +104,8 @@ int main(int argc, char **argv)
 					//log_info("SUCCESS about to verify");
 					fprintf(stdout, "SUCCESS");
 					int verified = verification();				
-					if (verified == 0){  // good reboot
+					save_state((char*)STATE_KEY, STATE_TESTING);
+					if (verified == 0) {  // good reboot
 						//sleep(5);
 						//log_info("will reboot here");
 						fprintf(stdout, "will reboot here");
