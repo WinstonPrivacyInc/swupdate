@@ -99,20 +99,28 @@ int main(int argc, char **argv)
 		//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
-								
-					if (verification() == SERVER_OK) {  // good reboot
-						sleep(5);
-						log_info("will reboot here");
+					int result;
+	
+					if ((result = save_state((char*)STATE_KEY, STATE_TESTING)) != SERVER_OK) {
+						log_info("Error while setting ustate on u-boot");
+						save_state((char*)STATE_KEY, STATE_FAILED);
+					}
 						/*
 						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
 							save_state((char*)STATE_KEY, STATE_FAILED);
 						}
-						*/
+						*/			
+					/*
+					if (verification() == SERVER_OK) {  // good reboot
+						sleep(5);
+						log_info("will reboot here");
+					
 					} else {
 						log_info("Update not verified, will not reboot");
 						save_state((char*)STATE_KEY, STATE_FAILED);
 					}
+					*/
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
 					save_state((char*)STATE_KEY, STATE_FAILED);
