@@ -26,6 +26,7 @@
 #include <progress_ipc.h>
 #include <util.h>
 #include <suricatta/state.h>
+#include <suricatta/suricatta.h>
 
 #define STATE_KEY "ustate"
 
@@ -42,9 +43,14 @@ static void log_info(char *message){
 // Currently switches state to 2 - STATE_TESTING
 static int verification()
 {
-        save_state((char*)STATE_KEY, STATE_TESTING);
-	log_info("change ustate to 2");
-	return 0; // TRUE
+	int result;
+	
+	if ((result = save_state((char*)STATE_KEY, STATE_TESTING)) != SERVER_OK) {
+		log_info("Error while setting ustate on u-boot");
+		return result;
+	}
+	
+	return SERVER_OK;
 }
 
 int main(int argc, char **argv)
@@ -52,11 +58,7 @@ int main(int argc, char **argv)
 	int connfd;
 	struct progress_msg msg;
 	const char *tmpdir;
-	unsigned int curstep = 0;
-	char bar[60];
-	unsigned int filled_len;
 	int opt_w = 0;
-	int c;
 	loglevel =  INFOLEVEL;
 	RECOVERY_STATUS	status = IDLE;		/* Update Status (Running, Failure) */
 	openlog ("swupdate-watcher", LOG_CONS | LOG_PID, LOG_USER);
@@ -91,29 +93,25 @@ int main(int argc, char **argv)
 
 		}
 
-
-
-
-
 		switch (msg.status) {
 			case SUCCESS:
 			case FAILURE:
 		//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
-					int verified = verification();				
-					if (verified == 0) {  // good reboot
+								
+					if (verification() == SERVER_OK) {  // good reboot
 						sleep(5);
 						log_info("will reboot here");
+						/*
 						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
 							save_state((char*)STATE_KEY, STATE_FAILED);
 						}
-					} else if (verified == -1) {
+						*/
+					} else {
 						log_info("Update not verified, will not reboot");
 						save_state((char*)STATE_KEY, STATE_FAILED);
-					} else {
-						log_info("verification state unknown");
 					}
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
