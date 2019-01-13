@@ -68,7 +68,7 @@ int bootloader_env_set(const char *name, const char *value)
 	}
 	fw_env_write ((char *)name, (char *)value);
 	ret = fw_env_flush(fw_env_opts);
-	fw_env_close (fw_env_opts)
+	fw_env_close (fw_env_opts);
 
 	unlock_uboot_env(lock);
 
