@@ -39,17 +39,20 @@ static void log_info(char *message){
         snprintf(log_msg, length, "%s", message);
 	syslog (LOG_INFO, log_msg);
 }
+
+
+
 // Function will run verification tasks on new parition
 // Currently switches state to 2 - STATE_TESTING
 static int verification()
 {
 	int result;
-	
+/*	
 	if ((result = save_state((char*)STATE_KEY, STATE_TESTING)) != SERVER_OK) {
 		log_info("Error while setting ustate on u-boot");
 		return result;
 	}
-	
+*/	
 	return SERVER_OK;
 }
 
@@ -99,12 +102,13 @@ int main(int argc, char **argv)
 		//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
-					int result;
-	
+					//save_state((char*)STATE_KEY, STATE_TESTING)
+					/*	
 					if ((result = save_state((char*)STATE_KEY, STATE_TESTING)) != SERVER_OK) {
 						log_info("Error while setting ustate on u-boot");
 						save_state((char*)STATE_KEY, STATE_FAILED);
 					}
+					*/
 						/*
 						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
@@ -123,7 +127,7 @@ int main(int argc, char **argv)
 					*/
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
-					save_state((char*)STATE_KEY, STATE_FAILED);
+					//save_state((char*)STATE_KEY, STATE_FAILED);
 				}
 				break;
 			case DONE:

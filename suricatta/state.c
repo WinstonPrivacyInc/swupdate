@@ -18,7 +18,7 @@
  * An empty key is accepted, but U-Boot reports a corrupted
  * environment/
  */
-/*
+
 #define CHECK_STATE_VAR(v) do { \
 	if (strnlen(v, BOOTLOADER_VAR_LENGTH) == 0) { \
 		WARN("Update Status Storage Key " \
@@ -26,10 +26,10 @@
 		v = (char *)"ustate"; \
 	} \
 } while(0)
-*/
+
 bool is_state_valid(update_state_t state) {
 	if ((state < STATE_OK) || (state > STATE_ERROR)) {
-//		ERROR("Unknown update state=%c\n", state);
+		ERROR("Unknown update state=%c\n", state);
 		return false;
 	}
 	return true;
@@ -70,7 +70,7 @@ server_op_res_t save_state(char *key, update_state_t value)
 	int ret;
 	char value_str[2] = {value, '\0'};
 
-//	CHECK_STATE_VAR(key);
+	CHECK_STATE_VAR(key);
 	ret = bootloader_env_set(key, value_str);
 
 	return ret == 0 ? SERVER_OK : SERVER_EERR;
@@ -79,11 +79,11 @@ server_op_res_t save_state(char *key, update_state_t value)
 server_op_res_t read_state(char *key, update_state_t *value)
 {
 	char *envval;
-//	CHECK_STATE_VAR(key);
+	CHECK_STATE_VAR(key);
 
 	envval = bootloader_env_get(key);
 	if (envval == NULL) {
-//		INFO("Key '%s' not found in Bootloader's environment.\n", key);
+		INFO("Key '%s' not found in Bootloader's environment.\n", key);
 		*value = STATE_NOT_AVAILABLE;
 		return SERVER_OK;
 	}
@@ -100,7 +100,7 @@ server_op_res_t reset_state(char *key)
 {
 	int ret;
 
-//	CHECK_STATE_VAR(key);
+	CHECK_STATE_VAR(key);
 	ret = bootloader_env_unset(key);
 	return ret == 0 ? SERVER_OK : SERVER_EERR;
 }
