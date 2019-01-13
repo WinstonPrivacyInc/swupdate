@@ -27,7 +27,7 @@
 #include <dirent.h>
 #include <syslog.h>
 #include "generated/autoconf.h"
-#include "uboot.h"
+#include "bootloader/uboot.h"
 #include "bootloader.h"
 #include "progress_ipc.h"
 #include "util.h"
@@ -60,7 +60,7 @@ static int lock_uboot_env(void)
 	int lockfd = -1;
 	lockfd = open(lockname, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (lockfd < 0) {
-		log_info("Error opening U-Boot lock file \n");
+		log_info("Error opening U-Boot lock file");
 		return -1;
 	}
 	if (flock(lockfd, LOCK_EX) < 0) {
@@ -87,7 +87,7 @@ static int bootloader_env_set(const char *name, const char *value)
 		return -1;
 
 	if (fw_env_open (fw_env_opts)) {
-		log_info("Error: environment not initialized\n");
+		log_info("Error: environment not initialized");
 		unlock_uboot_env(lock);
 		return -1;
 	}
@@ -117,7 +117,7 @@ static char *bootloader_env_get(const char *name)
 		return NULL;
 
 	if (fw_env_open (fw_env_opts)) {
-		log_info("Error: environment not initialized\n");
+		log_info("Error: environment not initialized");
 		unlock_uboot_env(lock);
 		return NULL;
 	}
