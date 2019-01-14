@@ -150,7 +150,7 @@ static int verification()
 {
 	int result;
 	
-	save_ustate((char*)STATE_KEY, STATE_TESTING)
+	save_ustate((char*)STATE_KEY, STATE_TESTING);
 	
 	return result;
 }
