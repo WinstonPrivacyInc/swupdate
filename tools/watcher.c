@@ -153,6 +153,8 @@ int main(int argc, char **argv)
 	struct progress_msg msg;
 	const char *tmpdir;
 	int opt_w = 0;
+	int result = -1;
+	char value_str[2] = {0,0};
 	loglevel =  INFOLEVEL;
 	RECOVERY_STATUS	status = IDLE;		/* Update Status (Running, Failure) */
 	openlog ("swupdate-watcher", LOG_CONS | LOG_PID, LOG_USER);
@@ -193,22 +195,25 @@ int main(int argc, char **argv)
 		//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
-					//save_state((char*)STATE_KEY, STATE_TESTING)
-					sleep(3);
-					char value_str[2] = {STATE_TESTING, '\0'};
-					bootloader_env_set((char *)STATE_KEY, value_str);
-					/*	
-					if ((result = save_state((char*)STATE_KEY, STATE_TESTING)) != SERVER_OK) {
-						log_info("Error while setting ustate on u-boot");
-						save_state((char*)STATE_KEY, STATE_FAILED);
-					}
-					*/
+					sleep(3); //give time for post install script to switch mmcrootpart 
+					value_str[2] = {STATE_TESTING, '\0'};
+					result = bootloader_env_set((char *)STATE_KEY, value_str);
+						
+					if (result == 0) {
+						log_info("system reebooting");
 						/*
 						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
-							save_state((char*)STATE_KEY, STATE_FAILED);
+							value_str[2] = {STATE_FAILED, '\0'};
+							result = bootloader_env_set((char *)STATE_KEY, value_str);
 						}
 						*/			
+					} else {
+					
+						log_info("Error while setting ustate on u-boot");
+						value_str[2] = {STATE_FAILED, '\0'};
+						result = bootloader_env_set((char *)STATE_KEY, value_str);
+					}
 					/*
 					if (verification() == SERVER_OK) {  // good reboot
 						sleep(5);
@@ -222,6 +227,8 @@ int main(int argc, char **argv)
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
 					//save_state((char*)STATE_KEY, STATE_FAILED);
+					value_str[2] = {STATE_FAILED, '\0'};
+					result = bootloader_env_set((char *)STATE_KEY, value_str);
 				}
 				break;
 			case DONE:
