@@ -27,7 +27,7 @@
 #include <dirent.h>
 #include <syslog.h>
 #include "generated/autoconf.h"
-#include "bootloader/uboot.h"
+#include "uboot.h"
 #include "progress_ipc.h"
 #include "util.h"
 #include "suricatta/state.h"

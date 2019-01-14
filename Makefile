@@ -433,7 +433,6 @@ ${tools-bins}: ${tools-objs} ${swupdate-libs} FORCE
 install: all
 	install -d ${DESTDIR}/usr/bin
 	install -d ${DESTDIR}/usr/include
-	install -d ${DESTDIR}/usr/include/bootloader
 	install -d ${DESTDIR}/usr/lib
 	install -d ${DESTDIR}/usr/lib/lua/$(LUAVER)
 	install -m 755 swupdate ${DESTDIR}/usr/bin
@@ -443,7 +442,6 @@ install: all
 	install -m 0644 include/network_ipc.h ${DESTDIR}/usr/include
 	install -m 0644 include/swupdate_status.h ${DESTDIR}/usr/include
 	install -m 0644 include/progress_ipc.h ${DESTDIR}/usr/include
-	install -m 0644 bootloader/uboot.h ${DESTDIR}/usr/include/bootloader
 	install -m 0755 ipc/lib.a ${DESTDIR}/usr/lib/libswupdate.a
 	install -m 0755 lua_swupdate.so $(DESTDIR)/usr/lib/lua/$(LUAVER)
 
