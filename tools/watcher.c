@@ -27,7 +27,6 @@
 #include <dirent.h>
 #include <syslog.h>
 #include "generated/autoconf.h"
-#include "bootloader/uboot.h"
 #include "bootloader.h"
 #include "progress_ipc.h"
 #include "util.h"
