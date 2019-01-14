@@ -196,7 +196,7 @@ int main(int argc, char **argv)
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
 					sleep(3); //give time for post install script to switch mmcrootpart 
-					value_str[2] = {STATE_TESTING, '\0'};
+					value_str = {STATE_TESTING, '\0'};
 					result = bootloader_env_set((char *)STATE_KEY, value_str);
 						
 					if (result == 0) {
@@ -211,7 +211,7 @@ int main(int argc, char **argv)
 					} else {
 					
 						log_info("Error while setting ustate on u-boot");
-						value_str[2] = {STATE_FAILED, '\0'};
+						value_str = {STATE_FAILED, '\0'};
 						result = bootloader_env_set((char *)STATE_KEY, value_str);
 					}
 					/*
@@ -227,7 +227,7 @@ int main(int argc, char **argv)
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
 					//save_state((char*)STATE_KEY, STATE_FAILED);
-					value_str[2] = {STATE_FAILED, '\0'};
+					value_str = {STATE_FAILED, '\0'};
 					result = bootloader_env_set((char *)STATE_KEY, value_str);
 				}
 				break;
