@@ -145,16 +145,14 @@ static int save_ustate(char *key, update_state_t value)
 
 // Function will run verification tasks on new parition
 // Currently switches state to 2 - STATE_TESTING
+// TODO add diagnostics to determine that update is verified
 static int verification()
 {
 	int result;
-/*	
-	if ((result = save_ustate((char*)STATE_KEY, STATE_TESTING)) != SERVER_OK) {
-		log_info("Error while setting ustate on u-boot");
-		return result;
-	}
-*/	
-	return SERVER_OK;
+	
+	save_ustate((char*)STATE_KEY, STATE_TESTING)
+	
+	return result;
 }
 
 int main(int argc, char **argv)
@@ -201,35 +199,22 @@ int main(int argc, char **argv)
 		switch (msg.status) {
 			case SUCCESS:
 			case FAILURE:
-		//TODO add method to verify validity of partition after msg.status SUCCESS and before reboot
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
 					sleep(3); //give time for post install script to switch mmcrootpart 
-					result = save_ustate((char *)STATE_KEY, STATE_TESTING);
-						
+					result = verification();
 					if (result == 0) {
 						log_info("system reebooting");
-						/*
 						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
 							result = save_ustate((char *)STATE_KEY, STATE_FAILED);
 						}
-						*/			
 					} else {
 					
 						log_info("Error while setting ustate on u-boot");
 						result = save_ustate((char *)STATE_KEY, STATE_FAILED);
 					}
-					/*
-					if (verification() == SERVER_OK) {  // good reboot
-						sleep(5);
-						log_info("will reboot here");
-					
-					} else {
-						log_info("Update not verified, will not reboot");
-						save_ustate((char*)STATE_KEY, STATE_FAILED);
-					}
-					*/
+
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
 					result = save_ustate((char *)STATE_KEY, STATE_FAILED);
