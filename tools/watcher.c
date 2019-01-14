@@ -194,7 +194,8 @@ int main(int argc, char **argv)
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
 					//save_state((char*)STATE_KEY, STATE_TESTING)
-					bootloader_env_set((char *)STATE_KEY, STATE_TESTING);
+					char value_str[2] = {STATE_TESTING, '\0'};
+					bootloader_env_set((char *)STATE_KEY, value_str);
 					/*	
 					if ((result = save_state((char*)STATE_KEY, STATE_TESTING)) != SERVER_OK) {
 						log_info("Error while setting ustate on u-boot");
