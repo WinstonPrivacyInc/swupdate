@@ -133,6 +133,16 @@ static char *bootloader_env_get(const char *name)
 	return value;
 }
 
+static int save_state(char *key, update_state_t value)
+{
+	int ret;
+	char value_str[2] = {value, '\0'};
+
+	ret = bootloader_env_set(key, value_str);
+
+	return ret;
+}
+
 // Function will run verification tasks on new parition
 // Currently switches state to 2 - STATE_TESTING
 static int verification()
@@ -153,8 +163,7 @@ int main(int argc, char **argv)
 	struct progress_msg msg;
 	const char *tmpdir;
 	int opt_w = 0;
-	int result = -1;
-	char value_str[2] = {0,0};
+	int result = 0;
 	loglevel =  INFOLEVEL;
 	RECOVERY_STATUS	status = IDLE;		/* Update Status (Running, Failure) */
 	openlog ("swupdate-watcher", LOG_CONS | LOG_PID, LOG_USER);
@@ -196,23 +205,20 @@ int main(int argc, char **argv)
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
 					sleep(3); //give time for post install script to switch mmcrootpart 
-					value_str = {STATE_TESTING, '\0'};
-					result = bootloader_env_set((char *)STATE_KEY, value_str);
+					result = save_state((char *)STATE_KEY, STATE_TESTING);
 						
 					if (result == 0) {
 						log_info("system reebooting");
 						/*
 						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
-							value_str[2] = {STATE_FAILED, '\0'};
-							result = bootloader_env_set((char *)STATE_KEY, value_str);
+							result = save_state((char *)STATE_KEY, STATE_FAILED);
 						}
 						*/			
 					} else {
 					
 						log_info("Error while setting ustate on u-boot");
-						value_str = {STATE_FAILED, '\0'};
-						result = bootloader_env_set((char *)STATE_KEY, value_str);
+						result = save_state((char *)STATE_KEY, STATE_FAILED);
 					}
 					/*
 					if (verification() == SERVER_OK) {  // good reboot
@@ -226,9 +232,7 @@ int main(int argc, char **argv)
 					*/
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
-					//save_state((char*)STATE_KEY, STATE_FAILED);
-					value_str = {STATE_FAILED, '\0'};
-					result = bootloader_env_set((char *)STATE_KEY, value_str);
+					result = save_state((char *)STATE_KEY, STATE_FAILED);
 				}
 				break;
 			case DONE:
