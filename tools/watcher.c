@@ -149,11 +149,10 @@ static int save_ustate(char *key, update_state_t value)
 static int verification()
 {
 	int result;
-	
+
+	// set ustate to STATE_TESTING, return 0 is SUCCESS
 	result = save_ustate((char*)STATE_KEY, STATE_TESTING);
-	fprintf(stdout, "result %d", result);
-	result = 1;
-	fprintf(stdout, "result %d", result);
+	
 	return result;
 }
 
@@ -206,7 +205,7 @@ int main(int argc, char **argv)
 					sleep(3); //give time for post install script to switch mmcrootpart 
 					result = verification();
 					if (result == 0) {
-						log_info("system reebooting");
+						log_info("system rebooting");
 						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
 							result = save_ustate((char *)STATE_KEY, STATE_FAILED);
