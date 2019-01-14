@@ -133,7 +133,7 @@ static char *bootloader_env_get(const char *name)
 	return value;
 }
 
-static int save_state(char *key, update_state_t value)
+static int save_ustate(char *key, update_state_t value)
 {
 	int ret;
 	char value_str[2] = {value, '\0'};
@@ -149,7 +149,7 @@ static int verification()
 {
 	int result;
 /*	
-	if ((result = save_state((char*)STATE_KEY, STATE_TESTING)) != SERVER_OK) {
+	if ((result = save_ustate((char*)STATE_KEY, STATE_TESTING)) != SERVER_OK) {
 		log_info("Error while setting ustate on u-boot");
 		return result;
 	}
@@ -205,20 +205,20 @@ int main(int argc, char **argv)
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
 					sleep(3); //give time for post install script to switch mmcrootpart 
-					result = save_state((char *)STATE_KEY, STATE_TESTING);
+					result = save_ustate((char *)STATE_KEY, STATE_TESTING);
 						
 					if (result == 0) {
 						log_info("system reebooting");
 						/*
 						if (system("reboot") < 0) { // It should never happen 
 							log_info("Please reset the board, reboot failed");
-							result = save_state((char *)STATE_KEY, STATE_FAILED);
+							result = save_ustate((char *)STATE_KEY, STATE_FAILED);
 						}
 						*/			
 					} else {
 					
 						log_info("Error while setting ustate on u-boot");
-						result = save_state((char *)STATE_KEY, STATE_FAILED);
+						result = save_ustate((char *)STATE_KEY, STATE_FAILED);
 					}
 					/*
 					if (verification() == SERVER_OK) {  // good reboot
@@ -227,12 +227,12 @@ int main(int argc, char **argv)
 					
 					} else {
 						log_info("Update not verified, will not reboot");
-						save_state((char*)STATE_KEY, STATE_FAILED);
+						save_ustate((char*)STATE_KEY, STATE_FAILED);
 					}
 					*/
 				} else if(msg.status == FAILURE) {
 					log_info("Change to FAILED ustate = 3");
-					result = save_state((char *)STATE_KEY, STATE_FAILED);
+					result = save_ustate((char *)STATE_KEY, STATE_FAILED);
 				}
 				break;
 			case DONE:
