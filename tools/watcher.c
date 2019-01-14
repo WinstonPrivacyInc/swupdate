@@ -194,6 +194,7 @@ int main(int argc, char **argv)
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
 					//save_state((char*)STATE_KEY, STATE_TESTING)
+					sleep(3);
 					char value_str[2] = {STATE_TESTING, '\0'};
 					bootloader_env_set((char *)STATE_KEY, value_str);
 					/*	
