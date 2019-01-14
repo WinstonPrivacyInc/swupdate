@@ -150,8 +150,10 @@ static int verification()
 {
 	int result;
 	
-	save_ustate((char*)STATE_KEY, STATE_TESTING);
-	
+	result = save_ustate((char*)STATE_KEY, STATE_TESTING);
+	fprintf(stdout, "result %d", result);
+	result = 1;
+	fprintf(stdout, "result %d", result);
 	return result;
 }
 
