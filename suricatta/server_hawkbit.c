@@ -119,7 +119,7 @@ static int get_target_data_length(void);
 
 server_hawkbit_t server_hawkbit = {.url = NULL,
 				   .polling_interval = DEFAULT_POLLING_INTERVAL,
-				   .polling_interval_from_server = true,
+				   .polling_interval_from_server = false,
 				   .debug = false,
 				   .device_id = NULL,
 				   .tenant = NULL,
