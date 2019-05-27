@@ -1500,7 +1500,7 @@ static int suricatta_settings(void *elem, void  __attribute__ ((__unused__)) *da
 		mandatory_argument_count |= URL_BIT;
 	}
 
-	get_field(LIBCFG_PAESER, elem, "polling_interval_from_server", 
+	get_field(LIBCFG_PARSER, elem, "polling_interval_from_server", 
 			&server_hawkbit.polling_interval_from_server);
 
 	get_field(LIBCFG_PARSER, elem, "polldelay",
