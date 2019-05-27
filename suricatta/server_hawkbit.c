@@ -57,7 +57,7 @@ static struct option long_options[] = {
     {"confirm", required_argument, NULL, 'c'},
     {"url", required_argument, NULL, 'u'},
     {"polldelay", required_argument, NULL, 'p'},
-    {"polling_interval_from_server", required_argument, NULL, 'd'}
+    {"polling_interval_from_server", required_argument, NULL, 'd'},
     {"nocheckcert", no_argument, NULL, 'x'},
     {"retry", required_argument, NULL, 'r'},
     {"retrywait", required_argument, NULL, 'w'},
