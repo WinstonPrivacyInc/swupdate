@@ -57,6 +57,7 @@ static struct option long_options[] = {
     {"confirm", required_argument, NULL, 'c'},
     {"url", required_argument, NULL, 'u'},
     {"polldelay", required_argument, NULL, 'p'},
+    {"polling_interval_from_server", required_argument, NULL, 'd'}
     {"nocheckcert", no_argument, NULL, 'x'},
     {"retry", required_argument, NULL, 'r'},
     {"retrywait", required_argument, NULL, 'w'},
@@ -119,7 +120,7 @@ static int get_target_data_length(void);
 
 server_hawkbit_t server_hawkbit = {.url = NULL,
 				   .polling_interval = DEFAULT_POLLING_INTERVAL,
-				   .polling_interval_from_server = false,
+				   .polling_interval_from_server = true,
 				   .debug = false,
 				   .device_id = NULL,
 				   .tenant = NULL,
@@ -1498,6 +1499,9 @@ static int suricatta_settings(void *elem, void  __attribute__ ((__unused__)) *da
 		SETSTRING(server_hawkbit.url, tmp);
 		mandatory_argument_count |= URL_BIT;
 	}
+
+	get_field(LIBCFG_PAESER, elem, "polling_interval_from_server", 
+			&server_hawkbit.polling_interval_from_server);
 
 	get_field(LIBCFG_PARSER, elem, "polldelay",
 		&server_hawkbit.polling_interval);
