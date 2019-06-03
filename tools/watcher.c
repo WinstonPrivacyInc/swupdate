@@ -185,7 +185,7 @@ int main(int argc, char **argv)
 		 * Something happens, show the info
 		 */
 		if ((status == IDLE) && (msg.status != IDLE)) {
-			log_info("Update started !");
+			// log_info("Update started !");
 			switch (msg.source) {
 				case SOURCE_UNKNOWN:
 					log_info("Interface: UNKNOWN");
@@ -196,12 +196,20 @@ int main(int argc, char **argv)
 			}
 
 		}
-
 		switch (msg.status) {
+			case IDLE:
+				INFO("swupdate-watcher: msg.status %s", "IDLE" );
+				break;
+			case START:
+				INFO("swupdate-watcher: msg.status %s and LED will show update pattern", "START");
+				break;
+			case RUN:
+				INFO("swupdate-watcher: %s and LED will continue running", "RUN");	
 			case SUCCESS:
 			case FAILURE:
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
+					INFO("swupdate-watcher: msg.status %s", "SUCCESS")
 					sleep(3); //give time for post install script to switch mmcrootpart 
 					result = verification();
 					if (result == 0) {
@@ -223,6 +231,7 @@ int main(int argc, char **argv)
 				break;
 			case DONE:
 				log_info("Update is DONE. ");
+				INFO("swupdate-watcher: msg.status %s", "DONE");
 				break;
 			default:
 				break;

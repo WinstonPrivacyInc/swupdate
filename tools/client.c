@@ -116,7 +116,6 @@ static int send_file(const char* filename) {
 	return 0;
 }
 
-
 /*
  * Simple example, it does nothing but calling the library
  */
