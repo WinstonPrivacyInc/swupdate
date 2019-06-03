@@ -29,7 +29,6 @@
 #include "generated/autoconf.h"
 #include "uboot.h"
 #include "progress_ipc.h"
-#include "util.h"
 #include "suricatta/state.h"
 #include "suricatta/suricatta.h"
 
@@ -198,18 +197,18 @@ int main(int argc, char **argv)
 		}
 		switch (msg.status) {
 			case IDLE:
-				INFO("swupdate-watcher: msg.status %s", "IDLE" );
+				log_info("msg.status: IDLE");
 				break;
 			case START:
-				INFO("swupdate-watcher: msg.status %s and LED will show update pattern", "START");
+				log_info("msg.status START and LED will show update pattern");
 				break;
 			case RUN:
-				INFO("swupdate-watcher: %s and LED will continue running", "RUN");	
+				log_info("swupdate-watcher RUN and LED will continue running");	
 			case SUCCESS:
 			case FAILURE:
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
-					INFO("swupdate-watcher: msg.status %s", "SUCCESS");
+					log_info("swupdate-watcher: msg.status SUCCESS");
 					sleep(3); //give time for post install script to switch mmcrootpart 
 					result = verification();
 					if (result == 0) {
@@ -231,7 +230,7 @@ int main(int argc, char **argv)
 				break;
 			case DONE:
 				log_info("Update is DONE. ");
-				INFO("swupdate-watcher: msg.status %s", "DONE");
+				log_info("msg.status DONE");
 				break;
 			default:
 				break;
