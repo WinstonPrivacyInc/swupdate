@@ -209,7 +209,7 @@ int main(int argc, char **argv)
 			case FAILURE:
 				if ((msg.status == SUCCESS)) {
 					log_info("SUCCESS about to verify");
-					INFO("swupdate-watcher: msg.status %s", "SUCCESS")
+					INFO("swupdate-watcher: msg.status %s", "SUCCESS");
 					sleep(3); //give time for post install script to switch mmcrootpart 
 					result = verification();
 					if (result == 0) {
