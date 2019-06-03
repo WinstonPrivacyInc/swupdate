@@ -34,7 +34,6 @@
 
 #define STATE_KEY "ustate"
 
-int loglevel = ERRORLEVEL;
 
 struct env_opts *fw_env_opts = &(struct env_opts) {
 	.config_file = (char *)CONFIG_UBOOT_FWENV
@@ -162,7 +161,6 @@ int main(int argc, char **argv)
 	const char *tmpdir;
 	int opt_w = 0;
 	int result = 0;
-	loglevel =  INFOLEVEL;
 	RECOVERY_STATUS	status = IDLE;		/* Update Status (Running, Failure) */
 	openlog ("swupdate-watcher", LOG_CONS | LOG_PID, LOG_USER);
 	/* Process options with getopt */
