@@ -159,7 +159,7 @@ int main(int argc, char **argv)
 	int connfd;
 	struct progress_msg msg;
 	const char *tmpdir;
-	int opt_w = 0;
+	int opt_w = 1;
 	int result = 0;
 	RECOVERY_STATUS	status = IDLE;		/* Update Status (Running, Failure) */
 	openlog ("swupdate-watcher", LOG_CONS | LOG_PID, LOG_USER);
@@ -205,9 +205,9 @@ int main(int argc, char **argv)
 			case SUCCESS:
 			case FAILURE:
 				if ((msg.status == SUCCESS)) {
-					log_info("SUCCESS about to verify");
 					log_info("swupdate-watcher: msg.status SUCCESS");
-					sleep(3); //give time for post install script to switch mmcrootpart 
+					log_info("SUCCESS about to verify");
+					sleep(1); //give time for post install script to switch mmcrootpart 
 					result = verification();
 					if (result == 0) {
 						log_info("system rebooting");
