@@ -209,6 +209,8 @@ int main(int argc, char **argv)
 					log_info("SUCCESS about to verify");
 					sleep(1); //give time for post install script to switch mmcrootpart 
 					result = verification();
+					// TODO fix verification function, currently not reliable.  
+					system("fw_setenv ustate 2"); // 2 = STATE_TESTING because verification is not reliably writing 
 					if (result == 0) {
 						log_info("system rebooting");
 						if (system("reboot") < 0) { // It should never happen 
