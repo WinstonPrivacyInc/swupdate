@@ -210,7 +210,10 @@ int main(int argc, char **argv)
 					sleep(1); //give time for post install script to switch mmcrootpart 
 					result = verification();
 					// TODO fix verification function, currently not reliable.  
+					// create a child process to set u-boot variable to STATE_TESTING.  
 					system("fw_setenv ustate 2"); // 2 = STATE_TESTING because verification is not reliably writing 
+					// sleep the calling thread 3 seconds before calling reboot
+					sleep(3);
 					if (result == 0) {
 						log_info("system rebooting");
 						if (system("reboot") < 0) { // It should never happen 
